@@ -7,6 +7,7 @@ from typing import List, NewType
 
 from torch import nn, optim
 from torch.nn import functional as F 
+from torchsummary import summary
 
 from utils import loss_curve
 
@@ -103,8 +104,8 @@ class LeNet(nn.Module):
 if __name__ == "__main__":
     train_loader = mnist_loader(train=True, batch_size=1024)
     valid_loader = mnist_loader(train=False, batch_size=1024)
-    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = LeNet().to(device)
+    summary(model, (1,28,28))
     losses = model.train(30, train_loader, device, valid_loader=valid_loader)
     loss_curve(losses)
